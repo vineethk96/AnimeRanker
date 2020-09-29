@@ -35,10 +35,19 @@ router.route('/friends').get((req, res) => {
 
 // POST update friends
 router.route('/friends').post((req, res) => {
-    
+
+    // Pull username and friend name from the request
+    const username = req.body.username;    
     const friend = req.body.friend;
 
-    //const newFriend = 
+    try{
+        const currUser = await User.findOne({username: username});
+
+        currUser.friend.append(friend);
+    }
+
+    // Add the friend to the friends list
+
 })
 
 
