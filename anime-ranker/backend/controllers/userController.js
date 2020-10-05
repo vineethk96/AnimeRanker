@@ -72,7 +72,8 @@ exports.get_friends_by_id = function(req, res, next){
 // Update friends list by id
 exports.update_friends_by_id = function(req, res, next){
 
-    var friendsObj = {}
+    // var friendsObj = {"Name": req.body.name,
+    //                     "ID": req.body.id};
 
 
     User.findByIdAndUpdate(req.params.id, {"$addToSet": {friendsList: req.body.name}}, (error, data) => {
