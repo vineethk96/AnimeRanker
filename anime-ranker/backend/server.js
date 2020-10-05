@@ -16,7 +16,7 @@ app.use(express.urlencoded( {extended: true} ));            // Allows for easier
 const uri = process.env.ATLAS_URI;
 
 // Connect to the Atlas DB using mongoose
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true } );
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false } );
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");

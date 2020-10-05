@@ -72,14 +72,19 @@ exports.get_friends_by_id = function(req, res, next){
 // Update friends list by id
 exports.update_friends_by_id = function(req, res, next){
 
-    User.findByIdAndUpdate(req.params.id, (error, data) => {
+    var friendsObj = {}
+
+
+    User.findByIdAndUpdate(req.params.id, {"$addToSet": {friendsList: req.body.name}}, (error, data) => {
+
+        console.log("it made it here");
 
         if(error){
             console.log("Error occurs when adding a friend by id");
             return next(error);
         }
         else{
-            console.log(req.body);
+            res.json(data.friendsList);
             console.log("New Friend was added");
         }
     });
