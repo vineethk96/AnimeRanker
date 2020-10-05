@@ -3,11 +3,10 @@ let User = require('../models/user.model');
 
 var user_controller = require('../controllers/userController');
 
-// GET all users
-router.get('/allUsers', user_controller.user_list);
+// ------- U S E R S -----------------------------------------------------------------------
 
-// GET single user by username
-router.get('/username', user_controller.get_user_by_username);
+// GET all users
+router.get('/all', user_controller.user_list);
 
 // GET single user by _id
 router.get('/:id', user_controller.get_user_by_id);
@@ -15,53 +14,40 @@ router.get('/:id', user_controller.get_user_by_id);
 // POST add new users
 router.post('/add', user_controller.add_user);
 
-// GET all friends of user
-router.get('/friends', (req, res) => {
-    // TODO
-})
+// ------- F R I E N D S -------------------------------------------------------------------
 
-// PATCH update friends
-router.patch('/friends/:userID', (req, res) => {
+// GET all friends of a user
+router.get('/friends/:id', user_controller.get_friends_by_id);
 
-    // Pull username and friend name from the request
-    const username = req.body.username;    
-    const friend = req.body.friend;
+// PATCH a new friend to the user
+router.patch('/friends/add/:id', user_controller.update_friends_by_id);
 
-    // try{
-    //     const currUser = await User.findOne({username: username});
+// PATCH to remove a friend of the user
+router.patch('/friends/remove/:id', user_controller.remove_friend_by_id);
 
-    //     currUser.friend.append(friend);
-    // }
+// ------- W A T C H L I S T ---------------------------------------------------------------
 
-    // Add the friend to the friends list
+// GET all watchlist of a user
+router.get('/watchlist/:id', user_controller.get_watchlist_by_id);
 
-})
+// PATCH a new anime to the user
+router.patch('/watchlist/add/:id', user_controller.update_watchlist_by_id);
 
+// PATCH remove an anime by user
+router.patch('/watchlist/remove/:id', user_controller.remove_watchlist_by_id);
 
+// ------- R E V I E W L I S T -------------------------------------------------------------
 
-// GET user watchList
-router.get('/watchList', (req, res) => {
-    // TODO
-})
+// GET all reviewlist of a user
+router.get('/reviewlist/:id', user_controller.get_reviewlist_by_id);
 
-// PATCH update watchList
-router.patch('/watchList/:userID', (req, res) => {
-    // TODO
-})
+// PATCH a new review to the user
+router.patch('/reviewlist/add/:id', user_controller.update_reviewlist_by_id);
 
+// PATCH remove a review by user
+router.patch('/reviewlist/remove/:id', user_controller.remove_reviewlist_by_id);
 
-
-// GET update reviewList
-router.get('/reviewList', (req, res) => {
-    // TODO
-})
-
-// PATCH update reviewList
-router.patch('/reviewList/:userID', (req, res) => {
-    // TODO
-})
-
-
+// ------- O T H E R -----------------------------------------------------------------------
 
 // DELETE delete users
 router.delete('/deleteUser/:id', user_controller.remove_user);
@@ -69,8 +55,8 @@ router.delete('/deleteUser/:id', user_controller.remove_user);
 // Error handler
 router.use((error, req, res, next) => {
 
-    res.status(400);
-    res.json("You done fucked up");
+    res.status(404);
+    res.json("Bad Request sent to Users API");
 });
 
 
