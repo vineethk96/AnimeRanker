@@ -1,50 +1,37 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 
+var user_controller = require('../controllers/userController');
+
 // GET all users
-router.route('/').get((req, res) => {
+router.get('/allUsers', user_controller.user_list);
 
-  User.find()
-    .then(users => res.json(users))
-    .catch(err => res.status(400).json('Error: ' + err));
+// GET single user by username
+router.get('/username', user_controller.get_user_by_username);
 
-});
+// GET single user by _id
+router.get('/:id', user_controller.get_user_by_id);
 
 // POST add new users
-router.route('/add').post((req, res) => {
-
-  // Pull Username from the request body
-  const username = req.body.username;
-
-  // Place Username into a User object, and call it newUser
-  const newUser = new User({username});
-
-  // Save the newUser into the DB
-  newUser.save()
-    .then(() => res.json('User added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
-
-});
-
-
+router.post('/add', user_controller.add_user);
 
 // GET all friends of user
-router.route('/friends').get((req, res) => {
+router.get('/friends', (req, res) => {
     // TODO
 })
 
-// POST update friends
-router.route('/friends').post((req, res) => {
+// PATCH update friends
+router.patch('/friends/:userID', (req, res) => {
 
     // Pull username and friend name from the request
     const username = req.body.username;    
     const friend = req.body.friend;
 
-    try{
-        const currUser = await User.findOne({username: username});
+    // try{
+    //     const currUser = await User.findOne({username: username});
 
-        currUser.friend.append(friend);
-    }
+    //     currUser.friend.append(friend);
+    // }
 
     // Add the friend to the friends list
 
@@ -53,32 +40,38 @@ router.route('/friends').post((req, res) => {
 
 
 // GET user watchList
-router.route('/watchList').get((req, res) => {
+router.get('/watchList', (req, res) => {
     // TODO
 })
 
-// POST update watchList
-router.route('/watchList').post((req, res) => {
+// PATCH update watchList
+router.patch('/watchList/:userID', (req, res) => {
     // TODO
 })
 
 
 
 // GET update reviewList
-router.route('/reviewList').get((req, res) => {
+router.get('/reviewList', (req, res) => {
     // TODO
 })
 
-// POST update reviewList
-router.route('/reviewList').post((req, res) => {
+// PATCH update reviewList
+router.patch('/reviewList/:userID', (req, res) => {
     // TODO
 })
 
 
 
 // DELETE delete users
-router.route('/deleteUser').delete((req, res) => {
-    // TODO
-})
+router.delete('/deleteUser/:id', user_controller.remove_user);
+
+// Error handler
+router.use((error, req, res, next) => {
+
+    res.status(400);
+    res.json("You done fucked up");
+});
+
 
 module.exports = router;

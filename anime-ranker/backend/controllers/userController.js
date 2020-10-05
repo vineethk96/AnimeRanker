@@ -1,31 +1,78 @@
-const usersRouter = require('./routes/users');
+var User = require('../models/user.model');
 
-// Display all users
-exports.user_list = function(res, req){
-    res.send("TODO: Display all Users");
+// Display all Users
+exports.user_list = function(req, res, next){
+
+    User.find((error, data) => {
+        if(error){
+            return next(error);
+        }
+        else{
+            res.json(data);
+            console.log("All Users Displayed")
+        }
+    });
+
 };
 
-// Get one user detail by username
-exports.user_detail = function(res, req){
-    res.send("TODO: Get one user by username");
+// Get user by username in body
+exports.get_user_by_username = function(req, res, next){
+
+    User.findOne(req.body, (error, data) => {
+        if(error){
+            return next(error);
+        }
+        else{
+            res.json(data);
+            console.log("User was found")
+        }
+    });
+
 };
 
-// Update Friends list
-exports.user_updateFriendsList = function(res, req){
-    res.send("TODO: update friends list");
+// Get user by id in the URL
+exports.get_user_by_id = function(req, res, next){
+
+    User.findById(req.params.id, (error, data) =>{
+        if(error){
+            console.log("Error occurs here!")
+            return next(error);
+        }
+        else{
+            res.json(data);
+            console.log("User was found by ID");
+        }
+    });
+
 };
 
-// Update Anime watch list
-exports.user_updateWatchList = function(res, req){
-    res.send("TODO: update watch list");
+// Add new user
+exports.add_user = function(req, res){
+
+    User.create(req.body, (error, data) => {
+
+        if(error){
+            return next(error)
+        }
+        else{
+            res.json(data)
+            console.log("User was added")
+        }
+    });
+
 };
 
-// Update Review List
-exports.user_updateReviewList = function(res, req){
-    res.send("TODO: update reviews list");
-};
+// Remove user
+exports.remove_user = function(req, res){
 
-// Delete User by username
-exports.user_delete = function(res, req){
-    res.send("TODO: delete user");
+    User.findByIdAndDelete(req.params.id, (error, data) => {
+
+        if(error){
+            return next(error);
+        }
+        else{
+            res.status(200).json({ msg: data });
+            console.log("removed User")
+        }
+    });
 };
